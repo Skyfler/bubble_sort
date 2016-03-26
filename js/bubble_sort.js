@@ -44,6 +44,8 @@ function SortContainer(options) {
 	
 	this._elem = options.element;
 	this._nextStepBtn = this._elem.querySelector('[data-component="nexstStep"]');
+	this._resetBtn = this._elem.querySelector('[data-component="reset"]');
+	this._autoSorting = this._elem.querySelector('[data-component="autosorting"]');
 	
 	this._currElemIndex;
 	this._cyclePass;
@@ -52,6 +54,7 @@ function SortContainer(options) {
 	this.createArrayBlocks();
 	
 	this._nextStepBtn.addEventListener('click', this.sortArrayBlocksStep.bind(this));	
+	this._resetBtn.addEventListener('click', this.createArrayBlocks.bind(this));
 	
 }
 
@@ -89,6 +92,7 @@ SortContainer.prototype.sortArrayBlocksStep = function() {
 	}
 	
 	this._nextStepBtn.disabled = true;
+	this._resetBtn.disabled = true;
 	
 	var curElem = this._elemArray[this._currElemIndex];
 	var nextElem = this._elemArray[this._currElemIndex + 1];
@@ -124,6 +128,7 @@ SortContainer.prototype.sortArrayBlocksStep = function() {
 		curElem.style.backgroundColor = '';
 		nextElem.style.backgroundColor = '';
 		this._nextStepBtn.disabled = false;
+		this._resetBtn.disabled = false;
 	}.bind(this), 1000);
 	
 	this._currElemIndex++
@@ -142,6 +147,11 @@ SortContainer.prototype.sortArrayBlocksStep = function() {
 		}
 	}
 	
+	setTimeout(function() {
+		if (this._autoSorting.checked) {
+			this.sortArrayBlocksStep();
+		}
+	}.bind(this), 1000);
 }
 
 //-----------------------------------------//
